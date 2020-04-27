@@ -1,4 +1,4 @@
-package storeFront.frames;
+package frames;
 
 import java.awt.EventQueue;
 
