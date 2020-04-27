@@ -18,7 +18,7 @@ import javax.swing.JTextPane;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 
-public class accountScreen implements ActionListener {
+public class accountScreen extends javax.swing.JFrame {
 	Popup p;
 	
 	private JFrame frame;
@@ -31,8 +31,8 @@ public class accountScreen implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					accountScreen window = new accountScreen();
-					window.frame.setVisible(true);
+					accountScreen accountScreen = new accountScreen();
+					accountScreen.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -105,7 +105,6 @@ public class accountScreen implements ActionListener {
 			
 			JButton btnNewButton = new JButton("New button");
 			btnNewButton.setBounds(40, 32, 89, 23);
-			btnNewButton.addActionListener(this);
 			panel_4.add(btnNewButton);
 			
 			JPanel panel_1 = new JPanel();
@@ -116,6 +115,17 @@ public class accountScreen implements ActionListener {
 			JLabel lblOptions = new JLabel("Options");
 			lblOptions.setBounds(10, 11, 37, 14);
 			panel_1.add(lblOptions);
+			
+			JButton goToStock = new JButton("Stock");
+			goToStock.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					stock stock = new stock();
+					stock.setVisible(true);
+					frame.setVisible(false);
+				}
+			});
+			goToStock.setBounds(136, 7, 89, 23);
+			panel_1.add(goToStock);
 			
 			
 	}
