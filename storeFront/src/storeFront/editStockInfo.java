@@ -2,6 +2,9 @@ package storeFront;
 
 import java.awt.EventQueue;
 
+
+import DBConn.dbConn;
+import DBConn.DbUtils;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -47,31 +50,49 @@ public class editStockInfo {
 		
 	}
 	
-
+	public static int calcReccomended(int minimumQuantity, int maximumQuantity) {
+		
+		int recQuantity = minimumQuantity + ((maximumQuantity - minimumQuantity) / 2);
+		
+		
+		
+		
+		return recQuantity;
+		
+	}
+	
 	
 	public void populate(String productID) {
 		
 		//int productID = Integer.parseInt(productIDs);
 
 	
-		ResultSet rs1 = dbConn.connectToDB("SELECT PROD_NAME, PROD_SALES_PRICE, PROD_MIN_QUANTITY, PROD_MAX_QUANTITY, PROD_REC_QUANTITY FROM YR3_STOCK WHERE PROD_ID =" + productID +";");
+		ResultSet rs1 = dbConn.connectToDB("SELECT PRODUCT_NAME, SALE_PRICE, MINIMUM_QUANTITY, MAXIMUM_QUANTITY, RECOMMENDED_QUANTITY FROM STOCK WHERE PRODUCT_ID =" + productID +";");
 		System.out.println(rs1);
 		try {
 			while(rs1.next()) {
-		String productName = rs1.getString("PROD_NAME");
-		String productPrice = rs1.getString("PROD_SALES_PRICE");
-		int minQuantity = rs1.getInt("PROD_MIN_QUANTITY");
-		int maxQuantity = rs1.getInt("PROD_MAX_QUANTITY");
-		int recQuantity = rs1.getInt("PROD_REC_QUANTITY");
+		String productName = rs1.getString("PRODUCT_NAME");
+		String productPrice = rs1.getString("SALE_PRICE");
+		int minQuantity = rs1.getInt("MINIMUM_QUANTITY");
+		int maxQuantity = rs1.getInt("MAXIMUM_QUANTITY");
+
+		
+		
 		
 		
 		prodName.setText(productName);
-		//prodID.setText(productID);
 		prodPrice.setText(productPrice);
 		minQuant.setText(String.valueOf(minQuantity));
 		maxQuant.setText(String.valueOf(maxQuantity));
+		
+		
+		
+		
 		}
 		
+			
+			
+			
 		
 		}
 		catch(Exception e) {
@@ -149,14 +170,17 @@ public class editStockInfo {
 				String productNameN = prodName.getText();
 				
 				String productPriceN = prodPrice.getText();
-				String minQuantN = minQuant.getText();
+				int minQuantI = Integer.parseInt(minQuant.getText());
+				int maxQuantI = Integer.parseInt(maxQuant.getText());
+				String minQuantU = minQuant.getText();
 				String maxQuantN = maxQuant.getText();
+				String recQuantity = String.valueOf(calcReccomended(minQuantI, maxQuantI));
 				
 				
 				try {
-					String updateStock = "UPDATE YR3_STOCK set PROD_NAME = ?, " + "PROD_SALES_PRICE = ?, " + "PROD_MIN_QUANTITY = ?, " + "PROD_MAX_QUANTITY = ?" + " WHERE PROD_ID = ?" ;
+					String updateStock = "UPDATE STOCK set PRODUCT_NAME = ?, " + "SALE_PRICE = ?, " + "MINIMUM_QUANTITY = ?, " + "MAXIMUM_QUANTITY = ?, "  + "RECOMMENDED_QUANTITY = ?" + " WHERE PRODUCT_ID = ?" ;
 					 
-					 String host = "jdbc:sqlserver://localhost;databaseName=YR3TEST;Trusted_Connection=True";
+					 String host = "jdbc:sqlserver://localhost;databaseName=STOREFRONT;Trusted_Connection=True";
 			         String uName = "user";
 			         String uPass = "pass";
 			         String connectionString = "jdbc:sqlserver://localhost;Database=master;Trusted_Connection=True;";
@@ -165,15 +189,16 @@ public class editStockInfo {
 			         PreparedStatement pstmt = con.prepareStatement(updateStock);
 			         pstmt.setString(1, productNameN);
 			         pstmt.setString(2, productPriceN);
-			         pstmt.setString(3, minQuantN);
+			         pstmt.setString(3, minQuantU);
 			         pstmt.setString(4, maxQuantN);
-			         pstmt.setString(5, productID);
+			         pstmt.setString(5, recQuantity);
+			         pstmt.setString(6, productID);
 			         
 			         pstmt.executeUpdate();
-			         System.out.println("Success!");
+			         System.out.println("Stock Info Updated!");
 			         
 			         stock.updateStockTable();
-				
+			         frame.dispose();
 				}
 				catch(Exception ex1) {
 					System.out.println(ex1);

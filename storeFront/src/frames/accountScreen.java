@@ -1,4 +1,4 @@
-package storeFront;
+package frames;
 
 import java.awt.EventQueue;
 
@@ -18,9 +18,7 @@ import javax.swing.JTextPane;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 
-public class accountScreen implements ActionListener {
-	Popup p;
-	
+public class accountScreen {
 	private JFrame frame;
 	
 
@@ -91,21 +89,8 @@ public class accountScreen implements ActionListener {
 			tabbedPane.addTab("Alcohol", null, panel_4, null);
 			panel_4.setLayout(null);
 			
-			
-			JFrame alcoholWarning = new JFrame("warningPopup");
-			alcoholWarning.setSize(400,400);
-			JLabel warning = new JLabel("Please check the customer is over 18 before selling alcohol");
-			
-			PopupFactory pf = new PopupFactory();
-			
-			JPanel p2 = new JPanel();
-			p2.add(warning);		
-			
-			p = pf.getPopup(alcoholWarning, p2, 180, 100);
-			
 			JButton btnNewButton = new JButton("New button");
 			btnNewButton.setBounds(40, 32, 89, 23);
-			btnNewButton.addActionListener(this);
 			panel_4.add(btnNewButton);
 			
 			JPanel panel_1 = new JPanel();
@@ -120,8 +105,4 @@ public class accountScreen implements ActionListener {
 			
 	}
 	
-	public void actionPerformed(ActionEvent e)
-	{
-		p.show();
-	}
 }

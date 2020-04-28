@@ -7,6 +7,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
+
+import DBConn.dbConn;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -28,18 +31,18 @@ public class recordWastage {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					recordWastage window = new recordWastage(null);
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+	//	EventQueue.invokeLater(new Runnable() {
+	//		public void run() {
+	//			try {
+	//				recordWastage window = new recordWastage(null);
+	//				window.frame.setVisible(true);
+	//			} catch (Exception e) {
+	//				e.printStackTrace();
+	//			}
+	//		}
+	//	});
+//	}
 
 	/**
 	 * Create the application.
@@ -53,11 +56,11 @@ public class recordWastage {
 	
 	public int getQuant(String productID) {
 		
-		ResultSet rs2 = dbConn.connectToDB("SELECT PROD_CURRENT_QUANTITY FROM YR3_STOCK WHERE PROD_ID =" + productID + ";");
+		ResultSet rs2 = dbConn.connectToDB("SELECT CURRENT_QUANTITY FROM STOCK WHERE PRODUCT_ID =" + productID + ";");
 		
 		try {
 			while(rs2.next()) {
-				int currentQuant = rs2.getInt("PROD_CURRENT_QUANTITY");
+				int currentQuant = rs2.getInt("CURRENT_QUANTITY");
 				return currentQuant;
 			}
 		} catch (SQLException e) {
@@ -73,12 +76,12 @@ public class recordWastage {
 	public void populateFields(String productID) {
 
 		
-		ResultSet rs1 = dbConn.connectToDB("SELECT PROD_NAME, PROD_CURRENT_QUANTITY FROM YR3_STOCK WHERE PROD_ID =" + productID +";");
+		ResultSet rs1 = dbConn.connectToDB("SELECT PRODUCT_NAME, CURRENT_QUANTITY FROM STOCK WHERE PRODUCT_ID =" + productID +";");
 		
 		try {
 			while(rs1.next()) {
-		String productName = rs1.getString("PROD_NAME");
-		int currentQuant = rs1.getInt("PROD_CURRENT_QUANTITY");
+		String productName = rs1.getString("PRODUCT_NAME");
+		int currentQuant = rs1.getInt("CURRENT_QUANTITY");
 
 		prodNameField.setText(productName);
 		
@@ -105,7 +108,7 @@ public class recordWastage {
 		frame.getContentPane().setLayout(null);
 		
 	//	JComboBox prodSelectBox = new JComboBox();
-	//	ResultSet rs2 = dbConn.connectToDB("SELECT * FROM YR3_STOCK");
+	//	ResultSet rs2 = dbConn.connectToDB("SELECT * FROM STOCKLIST");
 		
 	//	try {
 	//		while(rs2.next()) {
@@ -147,6 +150,7 @@ public class recordWastage {
 		wastageQuant.setColumns(10);
 		
 		JComboBox wastageReason = new JComboBox();
+		wastageReason.setModel(new DefaultComboBoxModel(new String[] {"Quality", "Complaint", "Gift", "Damage", "Theft"}));
 		wastageReason.setBounds(150, 171, 86, 22);
 		frame.getContentPane().add(wastageReason);
 		
@@ -168,10 +172,10 @@ public class recordWastage {
 		wastageSubmitBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				ResultSet rs = dbConn.connectToDB("SELECT PROD_CURRENT_QUANTITY FROM YR3_STOCK WHERE PROD_ID = " + productID);
+				ResultSet rs = dbConn.connectToDB("SELECT CURRENT_QUANTITY FROM STOCK WHERE PRODUCT_ID = " + productID);
 				try {
 					while(rs.next()) {
-						int oldQuant = rs.getInt("PROD_CURRENT_QUANTITY");
+						int oldQuant = rs.getInt("CURRENT_QUANTITY");
 					}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -181,7 +185,7 @@ public class recordWastage {
 				
 				String wastageQuantityS = wastageQuant.getText();
 				int wastageQuantity = Integer.parseInt(wastageQuant.getText());
-				String reason = "PRESET";
+				String reason = (String) wastageReason.getSelectedItem();
 				String addInfo = additionalInfo.getText();
 				String authName = wastageNameTxt.getText();
 				int newQuantity = oldQuant - wastageQuantity;
@@ -191,9 +195,9 @@ public class recordWastage {
 				
 				
 				try {
-					String updateWastage = "INSERT INTO WASTAGE_LIST (PROD_ID, WASTED_QUANT, REASON, ADDITIONAL_INFO, AUTH_NAME) values(?,?,?,?,?)" ;
+					String updateWastage = "INSERT INTO WASTAGE (PRODUCT_ID, WASTED_QUANTITY, REASON, ADDITIONAL_INFORMATION) values(?,?,?,?)" ;
 					 
-					 String host = "jdbc:sqlserver://localhost;databaseName=YR3TEST;Trusted_Connection=True";
+					 String host = "jdbc:sqlserver://localhost;databaseName=STOREFRONT;Trusted_Connection=True";
 			         String uName = "user";
 			         String uPass = "pass";
 			         String connectionString = "jdbc:sqlserver://localhost;Database=master;Trusted_Connection=True;";
@@ -204,21 +208,24 @@ public class recordWastage {
 			         pstmt.setString(2, wastageQuantityS);
 			         pstmt.setString(3, reason);
 			         pstmt.setString(4, addInfo);
-			         pstmt.setString(5, authName);
 			         
 			         pstmt.executeUpdate();
-			         System.out.println("Success!");
+			         System.out.println("Wastage Updated!");
 			        
-			          
-			         String updateStock = "UPDATE YR3_STOCK set PROD_CURRENT_QUANTITY = ?" + " WHERE PROD_ID = ?" ;
-			         PreparedStatement pstmt2 = con.prepareStatement(updateWastage);
+			        try {  
+			         String updateStock = "UPDATE STOCK set CURRENT_QUANTITY = ?" + " WHERE PRODUCT_ID = ?";
+			         PreparedStatement pstmt2 = con.prepareStatement(updateStock);
 			         pstmt2.setString(1, newQuantS);
 			         pstmt2.setString(2, productID);
 			         
 			         pstmt2.executeUpdate();
 			         System.out.println("Success!");
-			         
+			        }
+			        catch(Exception ex2) {
+			        	System.out.println(ex2);
+			        }
 			         stock.updateStockTable();
+			         stock.updateDeliveryTable();
 				
 				}
 				catch(Exception ex1) {
@@ -227,7 +234,7 @@ public class recordWastage {
 				
 				
 				//wastageQuant.getText();
-				//ResultSet rs3 = dbConn.connectToDB("SELECT CURRENT_QUANTITY FROM YR3_STOCK WHERE PROD_NAME = " + prodSelectBox.getSelectedItem() + ";");
+				//ResultSet rs3 = dbConn.connectToDB("SELECT CURRENT_QUANTITY FROM STOCKLIST WHERE PROD_NAME = " + prodSelectBox.getSelectedItem() + ";");
 				//System.out.println(rs3);
 				frame.dispose();
 			}

@@ -1,6 +1,7 @@
 package storeFront;
 
-import com.mysql.*;
+
+//import com.mysql.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,6 +18,10 @@ import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import DBConn.DbUtils;
+import DBConn.dbConn;
+
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -25,7 +30,7 @@ public class stock extends javax.swing.JFrame {
 
 	private JFrame frame;
 	private static JTable currentStockTable;
-	private JTable deliveryListTable;
+	private static JTable deliveryListTable;
 
 	/**
 	 * Launch the application.
@@ -42,43 +47,64 @@ public class stock extends javax.swing.JFrame {
 			}
 		});
 	}
+	
+	public int purchaseMade(int quantity) {
+		//get current quantity & price
+		
+		//if purchase quant < current quant
+		
+		//update DB
+		
+		// return price
+		
+		//else
+		
+		//return null + system msg
+		
+		
+		
+		return 0;
+	}
+	
+	
 
 	//Gets stock info from database
 	public void getLowStockInfo() {
 		//purchase price, product
-		ResultSet rs4 = dbConn.connectToDB("SELECT * FROM YR3_STOCK WHERE PROD_CURRENT_QUANTITY < PROD_REC_QUANTITY;");
+		dbConn.executeSQL("TRUNCATE TABLE DELIVERY;");
+		
+		ResultSet rs4 = dbConn.connectToDB("SELECT * FROM STOCK WHERE CURRENT_QUANTITY < RECOMMENDED_QUANTITY;");
 		
 		try {
 			while(rs4.next()) {
-				String product = rs4.getString("PROD_NAME");
-				int currentQuant = rs4.getInt("PROD_CURRENT_QUANTITY");
-				int maxQuant = rs4.getInt("PROD_MAX_QUANTITY");
-				int buyPrice = rs4.getInt("PROD_PURCHASE_PRICE");
+				String product = rs4.getString("PRODUCT_NAME");
+				int currentQuant = rs4.getInt("CURRENT_QUANTITY");
+				int maxQuant = rs4.getInt("MAXIMUM_QUANTITY");
+				int buyPrice = rs4.getInt("PURCHASE_PRICE");
 				int purchaseQuant = maxQuant-currentQuant;
-				int totalPrice = buyPrice * purchaseQuant;
-				int productID = rs4.getInt("PROD_ID");
+				int productID = rs4.getInt("PRODUCT_ID");
 				String productIDs = String.valueOf(productID);
 				
 				try {
-					String updateDel = "INSERT INTO DeliveryList (PROD_NAME, PROD_ORDER_QUANT, PROD_ID) values (?,?,?);" ;
+					String updateDel = "INSERT INTO DELIVERY (PRODUCT_ID, QUANTITY_ORDERED) values (?,?);" ;
 					 
-					 String host = "jdbc:sqlserver://localhost;databaseName=YR3TEST;Trusted_Connection=True";
+					 String host = "jdbc:sqlserver://localhost;databaseName=STOREFRONT;Trusted_Connection=True";
 			         String uName = "user";
 			         String uPass = "pass";
 			         String connectionString = "jdbc:sqlserver://localhost;Database=master;Trusted_Connection=True;";
 			         Connection con = DriverManager.getConnection(host, uName, uPass);
 					 
 			         PreparedStatement pstmt = con.prepareStatement(updateDel);
-			         pstmt.setString(1, product);
+			         pstmt.setString(1, productIDs);
 			         pstmt.setLong(2, purchaseQuant);
-			         pstmt.setString(3, productIDs);
+			         
 			  
 			         
 			         pstmt.executeUpdate();
-			         System.out.println("Success!");
 			         
-			         stock.updateStockTable();
-				
+			         
+			         
+			         
 				}
 				catch(Exception ex1) {
 					System.out.println(ex1);
@@ -90,6 +116,9 @@ public class stock extends javax.swing.JFrame {
 			e.printStackTrace();
 		}
 		
+		updateStockTable();
+        updateDeliveryTable();
+        System.out.println("Delivery List Updated!");
 		
 		//get all stock info
 		
@@ -109,7 +138,7 @@ public class stock extends javax.swing.JFrame {
 		//dbConn.loadDriver();
 	
 		
-		ResultSet rs = dbConn.connectToDB("Select PROD_NAME AS 'Product Name', PROD_ID AS 'ID', PROD_CURRENT_QUANTITY AS 'Current Stock', PROD_MIN_QUANTITY AS 'Min Stock', PROD_REC_QUANTITY AS 'Rec Stock',PROD_MAX_QUANTITY AS 'Max Stock' FROM YR3_STOCK");	
+		ResultSet rs = dbConn.connectToDB("Select PRODUCT_ID AS 'ID', PRODUCT_NAME AS 'Product Name', CURRENT_QUANTITY AS 'Current Stock', MINIMUM_QUANTITY AS 'Min Stock', RECOMMENDED_QUANTITY AS 'Rec Stock', MAXIMUM_QUANTITY AS 'Max Stock' FROM STOCK");	
 	
 		try {
 			while(rs.next()) {
@@ -121,7 +150,7 @@ public class stock extends javax.swing.JFrame {
 		}
 	}
 	public static void updateStockTable() {
-		ResultSet rsu = dbConn.connectToDB("Select PROD_NAME AS 'Product Name', PROD_ID AS 'ID', PROD_CURRENT_QUANTITY AS 'Current Stock', PROD_MIN_QUANTITY AS 'Min Stock', PROD_REC_QUANTITY AS 'Rec Stock',PROD_MAX_QUANTITY AS 'Max Stock' FROM YR3_STOCK");	
+		ResultSet rsu = dbConn.connectToDB("Select PRODUCT_ID AS 'ID', PRODUCT_NAME AS 'Product Name', CURRENT_QUANTITY AS 'Current Stock', MINIMUM_QUANTITY AS 'Min Stock', RECOMMENDED_QUANTITY AS 'Rec Stock',MAXIMUM_QUANTITY AS 'Max Stock' FROM STOCK");	
 		
 		try {
 			while(rsu.next()) {
@@ -134,9 +163,26 @@ public class stock extends javax.swing.JFrame {
 		
 			
 	}
+	
+	public static void updateDeliveryTable() {
+		ResultSet rsu = dbConn.connectToDB("SELECT STOCK.PRODUCT_ID AS 'ID', STOCK.PRODUCT_NAME AS 'Name', DELIVERY.QUANTITY_ORDERED AS 'Ordered' FROM DELIVERY "
+				+ "INNER JOIN STOCK ON DELIVERY.PRODUCT_ID = STOCK.PRODUCT_ID");
+		
+		try {
+			while(rsu.next()) {
+				deliveryListTable.setModel(DbUtils.resultSetToTableModel(rsu));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 
 	public void populateDeliveryTable() {
-		ResultSet rs5 = dbConn.connectToDB("SELECT PROD_ID AS 'ID', PROD_NAME AS 'Name', PROD_ORDER_QUANT AS'Ordered' FROM DeliveryList");
+		ResultSet rs5 = dbConn.connectToDB("SELECT STOCK.PRODUCT_ID AS 'ID', STOCK.PRODUCT_NAME AS 'Name', DELIVERY.QUANTITY_ORDERED AS 'Ordered' FROM DELIVERY "
+				 + " INNER JOIN STOCK ON DELIVERY.PRODUCT_ID = STOCK.PRODUCT_ID");
 		try {
 			while(rs5.next()) {
 				deliveryListTable.setModel(DbUtils.resultSetToTableModel(rs5));
@@ -175,7 +221,7 @@ public class stock extends javax.swing.JFrame {
 	public stock() {
 		initialize();
 		dbConn.loadDriver();
-		getLowStockInfo();
+		
 		populateTables();
 		populateDeliveryTable();
 	}
@@ -190,7 +236,7 @@ public class stock extends javax.swing.JFrame {
 		frame.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(478, 82, 443, 151);
+		scrollPane.setBounds(25, 74, 443, 361);
 		frame.getContentPane().add(scrollPane);
 		
 		currentStockTable = new JTable();
@@ -204,7 +250,7 @@ public class stock extends javax.swing.JFrame {
 		scrollPane.setViewportView(currentStockTable);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(478, 259, 307, 143);
+		scrollPane_1.setBounds(620, 74, 307, 361);
 		frame.getContentPane().add(scrollPane_1);
 		
 		deliveryListTable = new JTable();
@@ -219,21 +265,84 @@ public class stock extends javax.swing.JFrame {
 		deliveryListTable.getColumnModel().getColumn(2).setPreferredWidth(84);
 		scrollPane_1.setViewportView(deliveryListTable);
 		
-		JButton submitOrderBtn = new JButton("Submit Order");
-		submitOrderBtn.setBounds(799, 278, 111, 23);
-		frame.getContentPane().add(submitOrderBtn);
-		
 		JButton confirmDeliveryBtn = new JButton("Confirm Delivery");
-		confirmDeliveryBtn.setBounds(795, 312, 126, 23);
-		frame.getContentPane().add(confirmDeliveryBtn);
-		
-		JButton editDeliveryListBtn = new JButton("Save Delivery List");
-		editDeliveryListBtn.addActionListener(new ActionListener() {
+		confirmDeliveryBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//getOrderQuantity
+				
+				ResultSet rs7 = dbConn.connectToDB("SELECT PRODUCT_ID, QUANTITY_ORDERED FROM DELIVERY");
+				try {
+					while (rs7.next()) {
+						int orderedProductID = rs7.getInt("PRODUCT_ID");
+						int orderQuant = rs7.getInt("QUANTITY_ORDERED");
+						String prodIDS = String.valueOf(orderedProductID);
+						
+						
+						//get current stock for product
+						ResultSet rs8 = dbConn.connectToDB("SELECT CURRENT_QUANTITY FROM STOCK WHERE PRODUCT_ID = " + orderedProductID);
+						
+						while(rs8.next()) {
+						int currentStock = rs8.getInt("CURRENT_QUANTITY");
+						
+						int newStock = currentStock + orderQuant;
+						String newStockS = String.valueOf(newStock);
+						
+						//update the table
+						
+						
+						String updateStock = "UPDATE STOCK set CURRENT_QUANTITY = ? " + "WHERE PRODUCT_ID = ?";
+						String host = "jdbc:sqlserver://localhost;databaseName=STOREFRONT;Trusted_Connection=True";
+				         String uName = "user";
+				         String uPass = "pass";
+				         String connectionString = "jdbc:sqlserver://localhost;Database=master;Trusted_Connection=True;";
+				         Connection con = DriverManager.getConnection(host, uName, uPass);
+						 
+				         PreparedStatement pstmt = con.prepareStatement(updateStock);
+				         pstmt.setString(1, newStockS);
+				         pstmt.setString(2, prodIDS);
+
+				         pstmt.executeUpdate();
+				         System.out.println("Stock Info Updated!");
+							
+				         
+							
+						}
+						
+						//Add order quantity to current stock
+						
+						
+						
+						
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				//
+				
+				
+				
+				//clear delivery table
+				
+				updateStockTable();
+				
+				
+				dbConn.executeSQL("TRUNCATE TABLE DELIVERY");
+				
+				
+				System.out.println("Stock Added, DeliveryList Cleared!");
+				//updateDeliveryTable();
+				
+				
+				//add stock to current stock level
+				
+				
 			}
 		});
-		editDeliveryListBtn.setBounds(795, 346, 126, 23);
-		frame.getContentPane().add(editDeliveryListBtn);
+		confirmDeliveryBtn.setBounds(478, 402, 126, 33);
+		frame.getContentPane().add(confirmDeliveryBtn);
 		
 		JButton wastageBtn = new JButton("Record Wastage");
 		wastageBtn.addActionListener(new ActionListener() {
@@ -244,7 +353,7 @@ public class stock extends javax.swing.JFrame {
 				
 				try{
 					int row = currentStockTable.getSelectedRow();
-					int column = 1;
+					int column = 0;
 					String productID = String.valueOf(currentStockTable.getModel().getValueAt(row, column));
 					
 					
@@ -260,15 +369,15 @@ public class stock extends javax.swing.JFrame {
 				
 			}
 		});
-		wastageBtn.setBounds(314, 103, 126, 23);
+		wastageBtn.setBounds(478, 176, 126, 39);
 		frame.getContentPane().add(wastageBtn);
 		
 		JLabel lblNewLabel = new JLabel("Current Stock");
-		lblNewLabel.setBounds(488, 57, 80, 14);
+		lblNewLabel.setBounds(25, 49, 80, 14);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Delivery List");
-		lblNewLabel_1.setBounds(488, 244, 80, 14);
+		lblNewLabel_1.setBounds(620, 49, 80, 14);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JButton btnNewButton = new JButton("Edit Stock Info");
@@ -277,7 +386,7 @@ public class stock extends javax.swing.JFrame {
 				//opens editStockInfo page for selected stock
 				try{
 				int row = currentStockTable.getSelectedRow();
-				int column = 1;
+				int column = 0;
 				String productID = currentStockTable.getModel().getValueAt(row, column).toString();
 				editStockInfo editStockInfo = new editStockInfo(productID);
 				editStockInfo.frame.setVisible(true);
@@ -289,8 +398,83 @@ public class stock extends javax.swing.JFrame {
 				
 			}
 		});
-		btnNewButton.setBounds(324, 137, 116, 23);
+		btnNewButton.setBounds(478, 126, 126, 39);
 		frame.getContentPane().add(btnNewButton);
+		
+		JButton btnCreateDelList = new JButton("Create Order");
+		btnCreateDelList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				getLowStockInfo();
+				updateDeliveryTable();
+				
+			}
+		});
+		btnCreateDelList.setBounds(478, 264, 126, 33);
+		frame.getContentPane().add(btnCreateDelList);
+		
+		JButton btnNewItem = new JButton("Add New Item");
+		btnNewItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				addStock addStock = new addStock();
+				addStock.frame.setVisible(true);
+				
+				
+			}
+		});
+		btnNewItem.setBounds(478, 90, 126, 33);
+		frame.getContentPane().add(btnNewItem);
+		
+		JButton btnEditDelList = new JButton("Edit Order");
+		btnEditDelList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Selected Row from Delivery Table
+				
+				
+				try{
+					int row = deliveryListTable.getSelectedRow();
+					int column = 0;
+					String productID = deliveryListTable.getModel().getValueAt(row, column).toString();
+					editDeliveryInfo editDeliveryInfo = new editDeliveryInfo(productID);
+					editDeliveryInfo.frame.setVisible(true);
+					}
+					catch(Exception f) {
+						f.printStackTrace();
+					}
+				//Get ID
+				
+				//new window pulls delivery info and can be edited
+				
+				
+			}
+		});
+		btnEditDelList.setBounds(478, 308, 124, 37);
+		frame.getContentPane().add(btnEditDelList);
+		
+		JButton btnNewButton_1 = new JButton("View Wastage");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				wastageView wastageView = new wastageView();
+				wastageView.frame.setVisible(true);
+				
+			}
+		});
+		btnNewButton_1.setBounds(478, 220, 126, 33);
+		frame.getContentPane().add(btnNewButton_1);
+		
+		JButton btnSubmitOrder = new JButton("Submit Order");
+		btnSubmitOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				System.out.println("Order Submitted");
+				
+			}
+		});
+		btnSubmitOrder.setBounds(478, 356, 126, 35);
+		frame.getContentPane().add(btnSubmitOrder);
 
 		
 	}
