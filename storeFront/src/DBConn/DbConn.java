@@ -27,7 +27,7 @@ public class DbConn {
 	       
 	        try{
 	            
-	        	//DriverManager.getConnection("jdbc:mysql://localho2st", "LAPTOP-F226J196\nutza","" );
+	        	DriverManager.getConnection("jdbc:mysql://localhost", "LAPTOP-F226J196\nutza","" );
 	            String host = "jdbc:sqlserver://localhost;databaseName=YR3TEST;Trusted_Connection=True";
 	            String uName = "user";
 	            String uPass = "pass";

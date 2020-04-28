@@ -32,7 +32,6 @@ public class Register extends JFrame {
 	private JTextField txtLevel;
 	private JTextField txtRegister;
 	private JTextField txtId;
-	private JLabel lblNewLabel;
 	private JTextField txtClose;
 
 	/**
@@ -77,21 +76,21 @@ public class Register extends JFrame {
 		header.setHorizontalAlignment(SwingConstants.CENTER);
 		header.setForeground(new Color(255, 255, 255));
 		header.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
-		header.setBounds(156, 11, 316, 45);
+		header.setBounds(0, 0, 156, 36);
 		contentPane.add(header);
 		
 		header_1 = new JLabel("REGISTER NEW EMPLOYEE");
 		header_1.setHorizontalAlignment(SwingConstants.CENTER);
 		header_1.setForeground(Color.WHITE);
 		header_1.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
-		header_1.setBounds(156, 52, 316, 45);
+		header_1.setBounds(156, 33, 316, 45);
 		contentPane.add(header_1);
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(new Color(0, 0, 0));
 		separator.setBackground(new Color(0, 0, 0));
 		separator.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		separator.setBounds(231, 52, 162, 14);
+		separator.setBounds(0, 33, 629, 14);
 		contentPane.add(separator);
 		
 		txtForename = new JTextField();
@@ -161,12 +160,8 @@ public class Register extends JFrame {
 		txtId.setColumns(10);
 		txtId.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));
 		txtId.setBackground(SystemColor.controlDkShadow);
-		txtId.setBounds(71, 29, 35, 20);
+		txtId.setBounds(71, 70, 35, 20);
 		contentPane.add(txtId);
-		
-		lblNewLabel = new JLabel("Emp. ID");
-		lblNewLabel.setBounds(15, 31, 46, 14);
-		contentPane.add(lblNewLabel);
 		
 		txtClose = new JTextField();
 		txtClose.addMouseListener(new MouseAdapter() {
@@ -186,7 +181,7 @@ public class Register extends JFrame {
 		txtClose.setColumns(10);
 		txtClose.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		txtClose.setBackground(SystemColor.controlDkShadow);
-		txtClose.setBounds(454, 19, 165, 36);
+		txtClose.setBounds(429, 287, 165, 36);
 		contentPane.add(txtClose);
 	}
 }

@@ -143,7 +143,7 @@ public class Login extends JFrame {
 		header.setHorizontalAlignment(SwingConstants.CENTER);
 		header.setForeground(new Color(255, 255, 255));
 		header.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
-		header.setBounds(154, 45, 316, 45);
+		header.setBounds(0, 0, 153, 36);
 		contentPane.add(header);
 		
 		userIcon = new JLabel("");
@@ -171,9 +171,14 @@ public class Login extends JFrame {
 		separator.setForeground(new Color(0, 0, 0));
 		separator.setBackground(new Color(0, 0, 0));
 		separator.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		separator.setBounds(231, 87, 162, 14);
+		separator.setBounds(0, 33, 629, 14);
 		contentPane.add(separator);
+		
+		JLabel header_1 = new JLabel("SPYROU & SONS");
+		header_1.setHorizontalAlignment(SwingConstants.CENTER);
+		header_1.setForeground(Color.WHITE);
+		header_1.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
+		header_1.setBounds(0, 0, 153, 36);
+		contentPane.add(header_1);
 	}
-	
-	                                                                
 }
