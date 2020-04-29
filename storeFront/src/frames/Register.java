@@ -81,6 +81,12 @@ public class Register extends JFrame {
 		contentPane.add(separator);
 		
 		txtForename = new JTextField();
+		txtForename.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtForename.setText("");
+			}
+		});
 		txtForename.setText("FORENAME");
 		txtForename.setBackground(new Color(105, 105, 105));
 		txtForename.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
@@ -89,6 +95,12 @@ public class Register extends JFrame {
 		txtForename.setColumns(10);
 
 		txtSurname = new JTextField();
+		txtSurname.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtSurname.setText("");
+			}
+		});
 		txtSurname.setText("SURNAME");
 		txtSurname.setBackground(new Color(105, 105, 105));
 		txtSurname.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
@@ -97,6 +109,12 @@ public class Register extends JFrame {
 		contentPane.add(txtSurname);
 		
 		txtAddress = new JTextField();
+		txtAddress.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtAddress.setText("");
+			}
+		});
 		txtAddress.setText("ADDRESS");
 		txtAddress.setBackground(new Color(105, 105, 105));
 		txtAddress.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
@@ -105,6 +123,12 @@ public class Register extends JFrame {
 		contentPane.add(txtAddress);
 		
 		txtEmail = new JTextField();
+		txtEmail.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtEmail.setText("");
+			}
+		});
 		txtEmail.setText("EMAIL");
 		txtEmail.setBackground(new Color(105, 105, 105));
 		txtEmail.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
@@ -113,6 +137,12 @@ public class Register extends JFrame {
 		contentPane.add(txtEmail);
 		
 		txtTelephone = new JTextField();
+		txtTelephone.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtTelephone.setText("");
+			}
+		});
 		txtTelephone.setText("TELEPHONE");
 		txtTelephone.setBackground(new Color(105, 105, 105));
 		txtTelephone.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
@@ -121,6 +151,12 @@ public class Register extends JFrame {
 		contentPane.add(txtTelephone);
 		
 		txtLevel = new JTextField();
+		txtLevel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtLevel.setText("");
+			}
+		});
 		txtLevel.setText("CLEARANCE LEVEL");
 		txtLevel.setBackground(new Color(105, 105, 105));
 		txtLevel.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;

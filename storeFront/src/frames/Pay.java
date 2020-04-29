@@ -25,7 +25,7 @@ public class Pay extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
-	private JTextField txtMgrOptions;
+	private JTextField txtElp;
 	private JTextField txtLogOut;
 	private JTextField txtPayNow;
 	private JTextField textField_1;
@@ -76,26 +76,18 @@ public class Pay extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		txtMgrOptions = new JTextField();		
-		txtMgrOptions.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				dispose();
-				JFrame managerOptions = new ManagerOptions();
-				managerOptions.setVisible(true);
-			}
-		});
-		txtMgrOptions.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		txtMgrOptions.setEditable(false);
-		txtMgrOptions.setBackground(new Color(105, 105, 105));
-		txtMgrOptions.setForeground(new Color(255, 255, 255));
-		txtMgrOptions.setHorizontalAlignment(SwingConstants.CENTER);
-		txtMgrOptions.setFont(new Font("Tahoma", Font.BOLD, 15));
-		txtMgrOptions.setText("ELP PAYMENT");
-		txtMgrOptions.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		txtMgrOptions.setBounds(221, 158, 172, 80);
-		contentPane.add(txtMgrOptions);
-		txtMgrOptions.setColumns(10);
+		txtElp = new JTextField();		
+		txtElp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		txtElp.setEditable(false);
+		txtElp.setBackground(new Color(105, 105, 105));
+		txtElp.setForeground(new Color(255, 255, 255));
+		txtElp.setHorizontalAlignment(SwingConstants.CENTER);
+		txtElp.setFont(new Font("Tahoma", Font.BOLD, 15));
+		txtElp.setText("ELP PAYMENT");
+		txtElp.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		txtElp.setBounds(221, 158, 172, 80);
+		contentPane.add(txtElp);
+		txtElp.setColumns(10);
 		
 		txtLogOut = new JTextField();
 		txtLogOut.addMouseListener(new MouseAdapter() {
