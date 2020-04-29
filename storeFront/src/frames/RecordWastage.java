@@ -1,48 +1,43 @@
 package frames;
 
-import java.awt.EventQueue;
-
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import java.awt.Font;
+import java.awt.Toolkit;
 import javax.swing.JTextField;
-
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
 import DBConn.DbConn;
-
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.awt.event.ActionEvent;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextArea;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class RecordWastage {
-
-	JFrame frame;
-	private JTextField wastageQuant;
-	private JTextField additionalInfo;
-	private JTextField wastageNameTxt;
-	private JTextField prodNameField;
+public class RecordWastage extends JFrame {
 
 	/**
-	 * Launch the application.
+	 * 
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RecordWastage window = new RecordWastage(null);
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField txtQuantity;
+	private JTextArea txtInfo;
+	private JTextField txtEmpName;
+	private JTextField txtProductName;
+
 
 	/**
 	 * Create the application.
@@ -68,8 +63,7 @@ public class RecordWastage {
 			e.printStackTrace();
 		}
 		
-		return 10;
-		
+		return 10;		
 	}
 	
 	
@@ -83,7 +77,7 @@ public class RecordWastage {
 		String productName = rs1.getString("PROD_NAME");
 		int currentQuant = rs1.getInt("PROD_CURRENT_QUANTITY");
 
-		prodNameField.setText(productName);
+		txtProductName.setText(productName);
 		
 		}
 		
@@ -91,10 +85,7 @@ public class RecordWastage {
 		}
 		catch(Exception e) {
 			System.out.println(e);
-		}
-		
-		
-		
+		}				
 	}
 	
 	
@@ -102,79 +93,111 @@ public class RecordWastage {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(String productID, int oldQuant) {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 366, 427);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(320, 700, 400, 400);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(105, 105, 105));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
 		
-	//	JComboBox prodSelectBox = new JComboBox();
-	//	ResultSet rs2 = dbConn.connectToDB("SELECT * FROM YR3_STOCK");
+        // Move the window
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		int w = this.getSize().width;
+        int h = this.getSize().height;
+        int x = (dim.width-w)/2;
+        int y = (dim.height-h)/2;
+        this.setLocation(x, y);
 		
-	//	try {
-	//		while(rs2.next()) {
-	//			prodSelectBox.addItem(rs2.getString("PROD_NAME"));
-	//		}
-	//	} catch (SQLException e) {
-	//		// TODO Auto-generated catch block
-	//		e.printStackTrace();
-	//	}
-
-
-	//	prodSelectBox.setBounds(150, 85, 86, 22);
-	//	frame.getContentPane().add(prodSelectBox);
+		JLabel header = new JLabel("SPYROU & SONS");
+		header.setBounds(0, 0, 153, 36);
+		header.setHorizontalAlignment(SwingConstants.CENTER);
+		header.setForeground(new Color(255, 255, 255));
+		header.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
+		contentPane.add(header);
+		setUndecorated(true); //removes frame outline
 		
-		JLabel prodNameLabel = new JLabel("Product");
-		prodNameLabel.setBounds(93, 89, 37, 14);
-		frame.getContentPane().add(prodNameLabel);
+		JSeparator separator = new JSeparator();
+		separator.setBounds(0, 32, 629, 14);
+		separator.setForeground(new Color(0, 0, 0));
+		separator.setBackground(new Color(0, 0, 0));
+		separator.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		contentPane.add(separator);
 		
-		JLabel lblNewLabel = new JLabel("Record Wastage");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel.setBounds(93, 25, 159, 49);
-		frame.getContentPane().add(lblNewLabel);
+		JLabel subHeader = new JLabel("RECORD WASTAGE");
+		subHeader.setForeground(Color.WHITE);
+		subHeader.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
+		subHeader.setBounds(123, 29, 177, 49);
+		contentPane.add(subHeader);
 		
-		JLabel lblNewLabel_1 = new JLabel("Quantity");
-		lblNewLabel_1.setBounds(93, 134, 48, 14);
-		frame.getContentPane().add(lblNewLabel_1);
+		JLabel lblreason = new JLabel("Reason");
+		lblreason.setBounds(93, 175, 37, 14);
+		contentPane.add(lblreason);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("Reason");
-		lblNewLabel_1_1.setBounds(104, 175, 37, 14);
-		frame.getContentPane().add(lblNewLabel_1_1);
+		JLabel lblInfo = new JLabel("Additional Info");
+		lblInfo.setBounds(62, 217, 78, 14);
+		contentPane.add(lblInfo);
 		
-		JLabel additionalInfoLabel = new JLabel("Additional Info");
-		additionalInfoLabel.setBounds(63, 215, 78, 14);
-		frame.getContentPane().add(additionalInfoLabel);
+		txtProductName = new JTextField();
+		txtProductName.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtProductName.setText("");
+			}
+		});
+		txtProductName.setText("PRODUCT");
+		txtProductName.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));
+		txtProductName.setBackground(new Color(105, 105, 105));
+		txtProductName.setBounds(151, 86, 101, 20);
+		contentPane.add(txtProductName);
+		txtProductName.setColumns(10);
 		
-		wastageQuant = new JTextField();
-		wastageQuant.setBounds(164, 131, 64, 20);
-		frame.getContentPane().add(wastageQuant);
-		wastageQuant.setColumns(10);
+		txtQuantity = new JTextField();
+		txtQuantity.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtQuantity.setText("");
+			}
+		});
+		txtQuantity.setText("QUANTITY");
+		txtQuantity.setBounds(151, 131, 101, 20);
+		txtQuantity.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));
+		txtQuantity.setBackground(new Color(105, 105, 105));
+		contentPane.add(txtQuantity);
+		txtQuantity.setColumns(10);
 		
-		JComboBox wastageReason = new JComboBox();
-		wastageReason.setBounds(150, 171, 86, 22);
-		frame.getContentPane().add(wastageReason);
+		JComboBox cmbReason = new JComboBox();
+		cmbReason.setBackground(new Color(105, 105, 105));
+		cmbReason.setBounds(150, 171, 102, 22);
+		contentPane.add(cmbReason);
 		
-		additionalInfo = new JTextField();
-		additionalInfo.setColumns(10);
-		additionalInfo.setBounds(150, 212, 150, 20);
-		frame.getContentPane().add(additionalInfo);
+		txtInfo = new JTextArea();
+		txtInfo.setColumns(10);
+		txtInfo.setBounds(150, 212, 191, 58);
+		contentPane.add(txtInfo);
 		
-		JLabel nameLabel = new JLabel("Name");
-		nameLabel.setBounds(93, 256, 37, 14);
-		frame.getContentPane().add(nameLabel);
+		txtEmpName = new JTextField();
+		txtEmpName.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtEmpName.setText("");
+			}
+		});
+		txtEmpName.setText("NAME");
+		txtEmpName.setColumns(10);
+		txtEmpName.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));
+		txtEmpName.setBackground(new Color(105, 105, 105));
+		txtEmpName.setBounds(151, 286, 101, 20);
+		contentPane.add(txtEmpName);
 		
-		wastageNameTxt = new JTextField();
-		wastageNameTxt.setColumns(10);
-		wastageNameTxt.setBounds(150, 253, 64, 20);
-		frame.getContentPane().add(wastageNameTxt);
-		
-		JButton wastageSubmitBtn = new JButton("Submit");
-		wastageSubmitBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				ResultSet rs = DbConn.connectToDB("SELECT PROD_CURRENT_QUANTITY FROM YR3_STOCK WHERE PROD_ID = " + productID);
+		JTextField txtSubmit = new JTextField("SUBMIT");
+		txtSubmit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ResultSet rs = DbConn.connectToDB("SELECT CURRENT_QUANTITY FROM STOCK WHERE PRODUCT_ID = " + productID);
 				try {
 					while(rs.next()) {
-						int oldQuant = rs.getInt("PROD_CURRENT_QUANTITY");
+						int oldQuant = rs.getInt("CURRENT_QUANTITY");
 					}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -182,11 +205,11 @@ public class RecordWastage {
 				}
 				
 				
-				String wastageQuantityS = wastageQuant.getText();
-				int wastageQuantity = Integer.parseInt(wastageQuant.getText());
-				String reason = "PRESET";
-				String addInfo = additionalInfo.getText();
-				String authName = wastageNameTxt.getText();
+				String wastageQuantityS = txtQuantity.getText();
+				int wastageQuantity = Integer.parseInt(txtQuantity.getText());
+				String reason = (String) cmbReason.getSelectedItem();
+				String addInfo = txtInfo.getText();
+				String authName = txtEmpName.getText();
 				int newQuantity = oldQuant - wastageQuantity;
 				String newQuantS = String.valueOf(newQuantity);
 				
@@ -194,9 +217,9 @@ public class RecordWastage {
 				
 				
 				try {
-					String updateWastage = "INSERT INTO WASTAGE_LIST (PROD_ID, WASTED_QUANT, REASON, ADDITIONAL_INFO, AUTH_NAME) values(?,?,?,?,?)" ;
+					String updateWastage = "INSERT INTO WASTAGE (PRODUCT_ID, WASTED_QUANTITY, REASON, ADDITIONAL_INFORMATION) values(?,?,?,?)" ;
 					 
-					 String host = "jdbc:sqlserver://localhost;databaseName=YR3TEST;Trusted_Connection=True";
+					 String host = "jdbc:sqlserver://localhost;databaseName=STOREFRONT;Trusted_Connection=True";
 			         String uName = "user";
 			         String uPass = "pass";
 			         String connectionString = "jdbc:sqlserver://localhost;Database=master;Trusted_Connection=True;";
@@ -207,21 +230,24 @@ public class RecordWastage {
 			         pstmt.setString(2, wastageQuantityS);
 			         pstmt.setString(3, reason);
 			         pstmt.setString(4, addInfo);
-			         pstmt.setString(5, authName);
 			         
 			         pstmt.executeUpdate();
-			         System.out.println("Success!");
+			         System.out.println("Wastage Updated!");
 			        
-			          
-			         String updateStock = "UPDATE YR3_STOCK set PROD_CURRENT_QUANTITY = ?" + " WHERE PROD_ID = ?" ;
-			         PreparedStatement pstmt2 = con.prepareStatement(updateWastage);
+			        try {  
+			         String updateStock = "UPDATE STOCK set CURRENT_QUANTITY = ?" + " WHERE PRODUCT_ID = ?";
+			         PreparedStatement pstmt2 = con.prepareStatement(updateStock);
 			         pstmt2.setString(1, newQuantS);
 			         pstmt2.setString(2, productID);
 			         
 			         pstmt2.executeUpdate();
 			         System.out.println("Success!");
-			         
+			        }
+			        catch(Exception ex2) {
+			        	System.out.println(ex2);
+			        }
 			         Stock.updateStockTable();
+			         Stock.updateDeliveryTable();
 				
 				}
 				catch(Exception ex1) {
@@ -230,27 +256,41 @@ public class RecordWastage {
 				
 				
 				//wastageQuant.getText();
-				//ResultSet rs3 = dbConn.connectToDB("SELECT CURRENT_QUANTITY FROM YR3_STOCK WHERE PROD_NAME = " + prodSelectBox.getSelectedItem() + ";");
+				//ResultSet rs3 = dbConn.connectToDB("SELECT CURRENT_QUANTITY FROM STOCKLIST WHERE PROD_NAME = " + prodSelectBox.getSelectedItem() + ";");
 				//System.out.println(rs3);
-				frame.dispose();
+				dispose();
 			}
 		});
-		wastageSubmitBtn.setBounds(118, 317, 89, 23);
-		frame.getContentPane().add(wastageSubmitBtn);
+
+		txtSubmit.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		txtSubmit.setEditable(false);
+		txtSubmit.setBackground(new Color(105, 105, 105));
+		txtSubmit.setForeground(new Color(255, 255, 255));
+		txtSubmit.setHorizontalAlignment(SwingConstants.CENTER);
+		txtSubmit.setFont(new Font("Tahoma", Font.BOLD, 15));
+		txtSubmit.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		
-		JButton wastageCancelButton = new JButton("Cancel");
-		wastageCancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
+		txtSubmit.setBounds(93, 347, 89, 23);
+		contentPane.add(txtSubmit);
+		
+		
+		
+		JTextField txtClose = new JTextField("CLOSE");
+		txtClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		txtClose.setEditable(false);
+		txtClose.setBackground(new Color(105, 105, 105));
+		txtClose.setForeground(new Color(255, 255, 255));
+		txtClose.setHorizontalAlignment(SwingConstants.CENTER);
+		txtClose.setFont(new Font("Tahoma", Font.BOLD, 15));
+		txtClose.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));		
+		txtClose.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
 			}
 		});
-		wastageCancelButton.setBounds(118, 351, 89, 23);
-		frame.getContentPane().add(wastageCancelButton);
+		txtClose.setBounds(211, 347, 89, 23);
+		contentPane.add(txtClose);
 		
-		prodNameField = new JTextField();
-		prodNameField.setEditable(false);
-		prodNameField.setBounds(156, 86, 96, 20);
-		frame.getContentPane().add(prodNameField);
-		prodNameField.setColumns(10);
 	}
 }

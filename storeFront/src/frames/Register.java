@@ -1,6 +1,5 @@
 package frames;
 
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -22,8 +21,12 @@ import java.awt.Toolkit;
 
 public class Register extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JLabel header_1;
+	private JLabel subHeader;
 	private JTextField txtForename;
 	private JTextField txtSurname;
 	private JTextField txtAddress;
@@ -33,22 +36,6 @@ public class Register extends JFrame {
 	private JTextField txtRegister;
 	private JTextField txtId;
 	private JTextField txtClose;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Register frame = new Register();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -63,13 +50,13 @@ public class Register extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setUndecorated(true);
+		
+        // Move the window
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		int w = this.getSize().width;
         int h = this.getSize().height;
         int x = (dim.width-w)/2;
         int y = (dim.height-h)/2;
-
-        // Move the window
         this.setLocation(x, y);
 		
 		JLabel header = new JLabel("SPYROU & SONS");
@@ -79,12 +66,12 @@ public class Register extends JFrame {
 		header.setBounds(0, 0, 156, 36);
 		contentPane.add(header);
 		
-		header_1 = new JLabel("REGISTER NEW EMPLOYEE");
-		header_1.setHorizontalAlignment(SwingConstants.CENTER);
-		header_1.setForeground(Color.WHITE);
-		header_1.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
-		header_1.setBounds(156, 33, 316, 45);
-		contentPane.add(header_1);
+		subHeader = new JLabel("REGISTER NEW EMPLOYEE");
+		subHeader.setHorizontalAlignment(SwingConstants.CENTER);
+		subHeader.setForeground(Color.WHITE);
+		subHeader.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
+		subHeader.setBounds(156, 33, 316, 45);
+		contentPane.add(subHeader);
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(new Color(0, 0, 0));

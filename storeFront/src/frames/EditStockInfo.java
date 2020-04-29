@@ -1,43 +1,39 @@
 package frames;
-
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
 import DBConn.DbConn;
-
 import javax.swing.JPanel;
 import java.sql.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import javax.swing.JSeparator;
+import javax.swing.border.BevelBorder;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.BorderFactory;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.Component;
+import java.awt.SystemColor;
+import java.awt.Toolkit;
 
-
-public class EditStockInfo {
-
-	JFrame frame;
-	private JTextField prodName;
-	private JTextField prodPrice;
-	private JTextField minQuant;
-	private JTextField maxQuant;
+public class EditStockInfo extends JFrame {
 
 	/**
-	 * Launch the application.
+	 * 
 	 */
-	//public static void main(String[] args) {
-		//EventQueue.invokeLater(new Runnable() {
-			//public void run() {
-				//try {
-					//editStockInfo window = new editStockInfo(productName);
-					//window.frame.setVisible(true);
-				//} catch (Exception e) {
-					//e.printStackTrace();
-				//}
-			//}
-		//});
-	//}
+	private static final long serialVersionUID = -8348911250512170383L;
+	private JPanel contentPane;
+	private JTextField txtProduct;
+	private JTextField txtPrice;
+	private JTextField txtMin;
+	private JTextField txtMax;
+	private JTextField txtUpdateStockInfo;
+	private JTextField txtClose;
+
 
 	/**
 	 * Create the application.
@@ -46,120 +42,198 @@ public class EditStockInfo {
 		
 		initialize(productID);
 		DbConn.loadDriver();
-		populate(productID);
-		
+		populate(productID);		
 	}
 	
 
+	public static int calcReccomended(int minimumQuantity, int maximumQuantity) {
+		
+		int recQuantity = minimumQuantity + ((maximumQuantity - minimumQuantity) / 2);
+		
+		
+		
+		
+		return recQuantity;
+		
+	}
 	
-	public void populate(String productID) {
+	
+public void populate(String productID) {
 		
 		//int productID = Integer.parseInt(productIDs);
 
 	
-		ResultSet rs1 = DbConn.connectToDB("SELECT PROD_NAME, PROD_SALES_PRICE, PROD_MIN_QUANTITY, PROD_MAX_QUANTITY, PROD_REC_QUANTITY FROM YR3_STOCK WHERE PROD_ID =" + productID +";");
+		ResultSet rs1 = DbConn.connectToDB("SELECT PRODUCT_NAME, SALE_PRICE, MINIMUM_QUANTITY, MAXIMUM_QUANTITY, RECOMMENDED_QUANTITY FROM STOCK WHERE PRODUCT_ID =" + productID +";");
 		System.out.println(rs1);
 		try {
 			while(rs1.next()) {
-		String productName = rs1.getString("PROD_NAME");
-		String productPrice = rs1.getString("PROD_SALES_PRICE");
-		int minQuantity = rs1.getInt("PROD_MIN_QUANTITY");
-		int maxQuantity = rs1.getInt("PROD_MAX_QUANTITY");
-		int recQuantity = rs1.getInt("PROD_REC_QUANTITY");
+		String productName = rs1.getString("PRODUCT_NAME");
+		String productPrice = rs1.getString("SALE_PRICE");
+		int minQuantity = rs1.getInt("MINIMUM_QUANTITY");
+		int maxQuantity = rs1.getInt("MAXIMUM_QUANTITY");
+	
+		txtProduct.setText(productName);
+		txtPrice.setText(productPrice);
+		txtMin.setText(String.valueOf(minQuantity));
+		txtMax.setText(String.valueOf(maxQuantity));				
 		
-		
-		prodName.setText(productName);
-		//prodID.setText(productID);
-		prodPrice.setText(productPrice);
-		minQuant.setText(String.valueOf(minQuantity));
-		maxQuant.setText(String.valueOf(maxQuantity));
 		}
 		
+			
+			
+			
 		
 		}
 		catch(Exception e) {
 			System.out.println(e);
-		}
-		
+		}}
 
-		
-	}
-
+	
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(String productID) {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 527, 385);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(320, 700, 400, 356);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(105, 105, 105));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(27, 31, 455, 344);
-		frame.getContentPane().add(panel_1);
-		panel_1.setLayout(null);
+        // Move the window
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		int w = this.getSize().width;
+        int h = this.getSize().height;
+        int x = (dim.width-w)/2;
+        int y = (dim.height-h)/2;
+        this.setLocation(x, y);
 		
-		JButton btnNewButton = new JButton("close");
-		btnNewButton.setBounds(180, 230, 89, 23);
-		panel_1.add(btnNewButton);
+		JLabel header = new JLabel("SPYROU & SONS");
+		header.setBounds(0, 0, 153, 36);
+		header.setHorizontalAlignment(SwingConstants.CENTER);
+		header.setForeground(new Color(255, 255, 255));
+		header.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
+		contentPane.add(header);
+		setUndecorated(true); //removes frame outline
 		
-		JLabel lblNewLabel = new JLabel("Product Name");
-		lblNewLabel.setBounds(110, 65, 89, 14);
-		panel_1.add(lblNewLabel);
+		JSeparator separator = new JSeparator();
+		separator.setBounds(0, 32, 629, 14);
+		separator.setForeground(new Color(0, 0, 0));
+		separator.setBackground(new Color(0, 0, 0));
+		separator.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		contentPane.add(separator);
 		
-		prodName = new JTextField();
+		txtProduct = new JTextField();	
+		txtProduct.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtProduct.setText("");
+			}
+		});
+		txtProduct.setText("PRODUCT");
+		txtProduct.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
+		txtProduct.setBackground(new Color(105, 105, 105));
+		txtProduct.setBounds(133, 104, 135, 20);
+		contentPane.add(txtProduct);
+		txtProduct.setColumns(10);
 		
-		prodName.setBounds(222, 62, 96, 20);
-		panel_1.add(prodName);
-		prodName.setColumns(10);
 		
-		JLabel lblProductPrice = new JLabel("Product Price");
-		lblProductPrice.setBounds(120, 96, 73, 14);
-		panel_1.add(lblProductPrice);
+		txtPrice = new JTextField();
+		txtPrice.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtPrice.setText("");
+			}
+		});
+		txtPrice.setText("PRICE");
+		txtPrice.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
+		txtPrice.setBackground(new Color(105, 105, 105));
+		txtPrice.setBounds(133, 148, 135, 20);
+		contentPane.add(txtPrice);
+		txtPrice.setColumns(10);
 		
-		JLabel lblMinimumQuantity = new JLabel("Minimum Quantity");
-		lblMinimumQuantity.setBounds(110, 121, 89, 14);
-		panel_1.add(lblMinimumQuantity);
 		
-		JLabel lblMaximumQuantity = new JLabel("Maximum Quantity");
-		lblMaximumQuantity.setBounds(110, 146, 104, 14);
-		panel_1.add(lblMaximumQuantity);
+		txtMin = new JTextField();
+		txtMin.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtMin.setText("");
+			}
+		});
+		txtMin.setText("MIN. QUANTITY");
+		txtMin.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
+		txtMin.setBackground(new Color(105, 105, 105));
+		txtMin.setBounds(133, 195, 135, 20);
+		contentPane.add(txtMin);
+		txtMin.setColumns(10);
 		
-		prodPrice = new JTextField();
-
-		prodPrice.setColumns(10);
-		prodPrice.setBounds(222, 93, 96, 20);
-		panel_1.add(prodPrice);
 		
-		minQuant = new JTextField();
-
-		minQuant.setColumns(10);
-		minQuant.setBounds(222, 118, 96, 20);
-		panel_1.add(minQuant);
+		txtMax = new JTextField();
+		txtMax.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtMax.setText("");
+			}
+		});
+		txtMax.setText("MAX. QUANTITY");
+		txtMax.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
+		txtMax.setBackground(new Color(105, 105, 105));
+		txtMax.setBounds(133, 244, 135, 20);
+		contentPane.add(txtMax);
+		txtMax.setColumns(10);
 		
-		maxQuant = new JTextField();
-
-		maxQuant.setColumns(10);
-		maxQuant.setBounds(222, 143, 96, 20);
-		panel_1.add(maxQuant);
+		JLabel subHeader = new JLabel("STOCK EDITOR");
+		subHeader.setForeground(Color.WHITE);
+		subHeader.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
+		subHeader.setBounds(133, 33, 153, 45);
+		contentPane.add(subHeader);
 		
-		JButton btnUpdateStockInfo = new JButton("Update Stock Info");
-		btnUpdateStockInfo.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
+		txtClose = new JTextField();
+		txtClose.setText("CLOSE");
+		txtClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		txtClose.setHorizontalAlignment(SwingConstants.CENTER);
+		txtClose.setForeground(Color.WHITE);
+		txtClose.setFont(new Font("Tahoma", Font.BOLD, 15));
+		txtClose.setEditable(false);
+		txtClose.setColumns(10);
+		txtClose.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		txtClose.setBackground(SystemColor.controlDkShadow);
+		txtClose.setBounds(207, 290, 117, 36);
+		contentPane.add(txtClose);	
+		
+		txtUpdateStockInfo = new JTextField();
+		txtUpdateStockInfo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		txtUpdateStockInfo.setEditable(false);
+		txtUpdateStockInfo.setBackground(new Color(105, 105, 105));
+		txtUpdateStockInfo.setForeground(new Color(255, 255, 255));
+		txtUpdateStockInfo.setHorizontalAlignment(SwingConstants.CENTER);
+		txtUpdateStockInfo.setFont(new Font("Tahoma", Font.BOLD, 15));
+		txtUpdateStockInfo.setText("UPDATE");
+		txtUpdateStockInfo.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		txtUpdateStockInfo.setBounds(64, 290, 117, 36);
+		contentPane.add(txtUpdateStockInfo);
+		txtUpdateStockInfo.setColumns(10);
+		txtUpdateStockInfo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
 				//updates stock info in DB
 				
-				String productNameN = prodName.getText();
+				String productNameN = txtProduct.getText();
 				
-				String productPriceN = prodPrice.getText();
-				String minQuantN = minQuant.getText();
-				String maxQuantN = maxQuant.getText();
+				String productPriceN = txtPrice.getText();
+				int minQuantI = Integer.parseInt(txtMin.getText());
+				int maxQuantI = Integer.parseInt(txtMax.getText());
+				String minQuantU = txtMin.getText();
+				String maxQuantN = txtMax.getText();
+				String recQuantity = String.valueOf(calcReccomended(minQuantI, maxQuantI));
 				
 				
 				try {
-					String updateStock = "UPDATE YR3_STOCK set PROD_NAME = ?, " + "PROD_SALES_PRICE = ?, " + "PROD_MIN_QUANTITY = ?, " + "PROD_MAX_QUANTITY = ?" + " WHERE PROD_ID = ?" ;
+					String updateStock = "UPDATE STOCK set PRODUCT_NAME = ?, " + "SALE_PRICE = ?, " + "MINIMUM_QUANTITY = ?, " + "MAXIMUM_QUANTITY = ?, "  + "RECOMMENDED_QUANTITY = ?" + " WHERE PRODUCT_ID = ?" ;
 					 
-					 String host = "jdbc:sqlserver://localhost;databaseName=YR3TEST;Trusted_Connection=True";
+					 String host = "jdbc:sqlserver://localhost;databaseName=STOREFRONT;Trusted_Connection=True";
 			         String uName = "user";
 			         String uPass = "pass";
 			         String connectionString = "jdbc:sqlserver://localhost;Database=master;Trusted_Connection=True;";
@@ -168,15 +242,16 @@ public class EditStockInfo {
 			         PreparedStatement pstmt = con.prepareStatement(updateStock);
 			         pstmt.setString(1, productNameN);
 			         pstmt.setString(2, productPriceN);
-			         pstmt.setString(3, minQuantN);
+			         pstmt.setString(3, minQuantU);
 			         pstmt.setString(4, maxQuantN);
-			         pstmt.setString(5, productID);
+			         pstmt.setString(5, recQuantity);
+			         pstmt.setString(6, productID);
 			         
 			         pstmt.executeUpdate();
-			         System.out.println("Success!");
+			         System.out.println("Stock Info Updated!");
 			         
 			         Stock.updateStockTable();
-				
+			         dispose();
 				}
 				catch(Exception ex1) {
 					System.out.println(ex1);
@@ -185,12 +260,10 @@ public class EditStockInfo {
 				
 			}
 		});
-		btnUpdateStockInfo.setBounds(159, 196, 135, 23);
-		panel_1.add(btnUpdateStockInfo);
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-			}
-		});
+		
+		
+		}
+
+		
 	}
-}
+

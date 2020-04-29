@@ -1,31 +1,28 @@
 package frames;
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-
 import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.border.BevelBorder;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Component;
-import javax.swing.JTabbedPane;
-import javax.swing.JButton;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
 
 public class Pay extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField txtMgrOptions;
@@ -35,22 +32,6 @@ public class Pay extends JFrame {
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField txtClose;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.

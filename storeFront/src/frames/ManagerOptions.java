@@ -26,27 +26,16 @@ import java.awt.Toolkit;
 
 public class ManagerOptions extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtMgrOptions;
 	private JTextField txtEnterWastage;
 	private JTextField txtUpdateStock;
 	private JTextField txtRegisterUser;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -105,14 +94,14 @@ public class ManagerOptions extends JFrame {
 		txtMgrOptions.setColumns(10);
 		
 		txtEnterWastage = new JTextField();
-		txtEnterWastage.addMouseListener(new MouseAdapter() {
+		/*txtEnterWastage.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dispose();
-				JFrame recordWastage = new RecordWastage();
-				recordWastage.setVisible(true);				
+				JFrame RecordWastage = new RecordWastage();
+				RecordWastage.setVisible(true);				
 			}
-		});
+		});*/
 		txtEnterWastage.setText("ENTER WASTAGE");
 		txtEnterWastage.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		txtEnterWastage.setHorizontalAlignment(SwingConstants.CENTER);
@@ -130,11 +119,19 @@ public class ManagerOptions extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dispose();
-				JFrame editStockInfo = new EditStockInfo();
-				editStockInfo.setVisible(true);
+				JFrame Stock = new Stock();
+				Stock.setVisible(true);
 			}
 		});
-		txtUpdateStock.setText("UPDATE STOCK");
+		txtUpdateStock.setText("VIEW STOCK LIST");
+		txtUpdateStock.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+				JFrame Stock = new Stock();
+				Stock.setVisible(true);
+			}
+		});
 		txtUpdateStock.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		txtUpdateStock.setHorizontalAlignment(SwingConstants.CENTER);
 		txtUpdateStock.setForeground(Color.WHITE);

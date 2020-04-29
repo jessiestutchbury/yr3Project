@@ -24,6 +24,10 @@ import java.awt.Component;
 
 public class Login extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtUsername;
 	private JPasswordField pwdPassword;
@@ -72,7 +76,6 @@ public class Login extends JFrame {
 		contentPane.setLayout(null);
 		
 		txtUsername = new JTextField();
-		txtUsername.setRequestFocusEnabled(false);
 		txtUsername.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -80,7 +83,6 @@ public class Login extends JFrame {
 			}
 		});
 		txtUsername.setText("USERNAME");
-		txtUsername.setCaretColor(new Color(0, 0, 0));
 		txtUsername.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));
 		txtUsername.setBackground(new Color(105, 105, 105));
 		txtUsername.setBounds(184, 112, 270, 30);
@@ -96,7 +98,6 @@ public class Login extends JFrame {
 		});
 		pwdPassword.setText("PASWORD");
 		pwdPassword.setBackground(new Color(105, 105, 105));
-		pwdPassword.setCaretColor(new Color(0, 0, 0));
 		pwdPassword.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));
 		pwdPassword.setBounds(184, 173, 270, 30);
 		contentPane.add(pwdPassword);

@@ -1,21 +1,16 @@
 package frames;
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-
 import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.border.BevelBorder;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Component;
@@ -26,27 +21,16 @@ import java.awt.Toolkit;
 
 public class Dashboard extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField txtMgrOptions;
 	private JTextField txtLogOut;
 	private JTextField txtPayNow;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -108,6 +92,7 @@ public class Dashboard extends JFrame {
 		panel.add(btnNewButton);
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(105, 105, 105));
 		tabbedPane.addTab("Drink", null, panel_1, null);
 		
 		txtMgrOptions = new JTextField();		
