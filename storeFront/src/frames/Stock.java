@@ -40,6 +40,8 @@ public class Stock extends JFrame {
 	private static JTable deliveryListTable;
 	private JTextField txtClose;
 	private JTextField txtAddStock;
+	private JTextField txtEditOrder;
+	private JTextField txtViewWastage;
 
 	
 	public int purchaseMade(int quantity) {
@@ -313,7 +315,7 @@ public class Stock extends JFrame {
 		txtSubmit.setFont(new Font("Tahoma", Font.BOLD, 15));
 		txtSubmit.setText("SUBMIT ORDER");
 		txtSubmit.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		txtSubmit.setBounds(697, 533, 166, 23);
+		txtSubmit.setBounds(696, 567, 166, 23);
 		contentPane.add(txtSubmit);
 	
 		
@@ -403,20 +405,30 @@ public class Stock extends JFrame {
 		txtConfirmDlvry.setFont(new Font("Tahoma", Font.BOLD, 15));
 		txtConfirmDlvry.setText("CONFIRM DELIVERY");
 		txtConfirmDlvry.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		txtConfirmDlvry.setBounds(472, 567, 166, 23);
+		txtConfirmDlvry.setBounds(472, 567, 191, 23);
 		contentPane.add(txtConfirmDlvry);
 	
 		
 		JTextField txtSaveDelivery = new JTextField();
+		txtSaveDelivery.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				
+				getLowStockInfo();
+				updateDeliveryTable();
+				
+			}
+		});
 		txtSaveDelivery.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		txtSaveDelivery.setEditable(false);
 		txtSaveDelivery.setBackground(new Color(105, 105, 105));
 		txtSaveDelivery.setForeground(new Color(255, 255, 255));
 		txtSaveDelivery.setHorizontalAlignment(SwingConstants.CENTER);
 		txtSaveDelivery.setFont(new Font("Tahoma", Font.BOLD, 15));
-		txtSaveDelivery.setText("SAVE DELIVERY LIST");
+		txtSaveDelivery.setText("CREATE DELIVERY LIST");
 		txtSaveDelivery.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		txtSaveDelivery.setBounds(472, 533, 166, 23);
+		txtSaveDelivery.setBounds(472, 533, 191, 23);
 		contentPane.add(txtSaveDelivery);
 	
 		
@@ -437,7 +449,7 @@ public class Stock extends JFrame {
 		//use selected product				
 				try{
 					int row = currentStockTable.getSelectedRow();
-					int column = 1;
+					int column = 0;
 					String productID = String.valueOf(currentStockTable.getModel().getValueAt(row, column));
 					RecordWastage RecordWastage = new RecordWastage(productID);
 					RecordWastage.setVisible(true);
@@ -467,7 +479,7 @@ public class Stock extends JFrame {
 				//opens editStockInfo page for selected stock
 				try{
 				int row = currentStockTable.getSelectedRow();
-				int column = 1;
+				int column = 0;
 				String productID = currentStockTable.getModel().getValueAt(row, column).toString();
 				EditStockInfo EditStockInfo = new EditStockInfo(productID);
 				EditStockInfo.setVisible(true);
@@ -483,6 +495,16 @@ public class Stock extends JFrame {
 		contentPane.add(txtEditStock);
 		
 		txtClose = new JTextField("CLOSE");
+		txtClose.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				ManagerOptions managerOptions = new ManagerOptions();
+				managerOptions.setVisible(true);
+				dispose();
+				
+			}
+		});
 		txtClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		txtClose.setEditable(false);
 		txtClose.setBackground(new Color(105, 105, 105));
@@ -494,6 +516,16 @@ public class Stock extends JFrame {
 		contentPane.add(txtClose);
 		
 		txtAddStock = new JTextField();
+		txtAddStock.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				dispose();
+				AddStock addStock = new AddStock();
+				addStock.setVisible(true);
+				
+			}
+		});
 		txtAddStock.setText("ADD STOCK");
 		txtAddStock.setHorizontalAlignment(SwingConstants.CENTER);
 		txtAddStock.setForeground(Color.WHITE);
@@ -503,6 +535,55 @@ public class Stock extends JFrame {
 		txtAddStock.setBackground(SystemColor.controlDkShadow);
 		txtAddStock.setBounds(206, 533, 166, 23);
 		contentPane.add(txtAddStock);
+		
+		txtEditOrder = new JTextField();
+		txtEditOrder.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				try{
+					int row = deliveryListTable.getSelectedRow();
+					int column = 0;
+					String productID = deliveryListTable.getModel().getValueAt(row, column).toString();
+					EditDeliveryInfo editDeliveryInfo = new EditDeliveryInfo(productID);
+					editDeliveryInfo.setVisible(true);
+					}
+					catch(Exception f) {
+						f.printStackTrace();
+					}
+				
+			}
+		});
+		txtEditOrder.setText("EDIT ORDER");
+		txtEditOrder.setHorizontalAlignment(SwingConstants.CENTER);
+		txtEditOrder.setForeground(Color.WHITE);
+		txtEditOrder.setFont(new Font("Tahoma", Font.BOLD, 15));
+		txtEditOrder.setEditable(false);
+		txtEditOrder.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		txtEditOrder.setBackground(SystemColor.controlDkShadow);
+		txtEditOrder.setBounds(696, 533, 166, 23);
+		contentPane.add(txtEditOrder);
+		
+		txtViewWastage = new JTextField();
+		txtViewWastage.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				WastageView wastageView = new WastageView();
+				wastageView.setVisible(true);
+				
+				
+			}
+		});
+		txtViewWastage.setText("VIEW WASTAGE");
+		txtViewWastage.setHorizontalAlignment(SwingConstants.CENTER);
+		txtViewWastage.setForeground(Color.WHITE);
+		txtViewWastage.setFont(new Font("Tahoma", Font.BOLD, 15));
+		txtViewWastage.setEditable(false);
+		txtViewWastage.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		txtViewWastage.setBackground(SystemColor.controlDkShadow);
+		txtViewWastage.setBounds(206, 567, 166, 23);
+		contentPane.add(txtViewWastage);
 
 		
 	}

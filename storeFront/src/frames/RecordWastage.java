@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import javax.swing.JTextArea;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.DefaultComboBoxModel;
 
 public class RecordWastage extends JFrame {
 
@@ -35,7 +36,6 @@ public class RecordWastage extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtQuantity;
 	private JTextArea txtInfo;
-	private JTextField txtEmpName;
 	private JTextField txtProductName;
 
 
@@ -51,11 +51,11 @@ public class RecordWastage extends JFrame {
 	
 	public int getQuant(String productID) {
 		
-		ResultSet rs2 = DbConn.connectToDB("SELECT PROD_CURRENT_QUANTITY FROM YR3_STOCK WHERE PROD_ID =" + productID + ";");
+		ResultSet rs2 = DbConn.connectToDB("SELECT CURRENT_QUANTITY FROM STOCK WHERE PRODUCT_ID =" + productID + ";");
 		
 		try {
 			while(rs2.next()) {
-				int currentQuant = rs2.getInt("PROD_CURRENT_QUANTITY");
+				int currentQuant = rs2.getInt("CURRENT_QUANTITY");
 				return currentQuant;
 			}
 		} catch (SQLException e) {
@@ -63,19 +63,20 @@ public class RecordWastage extends JFrame {
 			e.printStackTrace();
 		}
 		
-		return 10;		
+		return 0;
+		
 	}
 	
 	
-	public void populateFields(String productID) {
+public void populateFields(String productID) {
 
 		
-		ResultSet rs1 = DbConn.connectToDB("SELECT PROD_NAME, PROD_CURRENT_QUANTITY FROM YR3_STOCK WHERE PROD_ID =" + productID +";");
+		ResultSet rs1 = DbConn.connectToDB("SELECT PRODUCT_NAME, CURRENT_QUANTITY FROM STOCK WHERE PRODUCT_ID =" + productID +";");
 		
 		try {
 			while(rs1.next()) {
-		String productName = rs1.getString("PROD_NAME");
-		int currentQuant = rs1.getInt("PROD_CURRENT_QUANTITY");
+		String productName = rs1.getString("PRODUCT_NAME");
+		int currentQuant = rs1.getInt("CURRENT_QUANTITY");
 
 		txtProductName.setText(productName);
 		
@@ -85,7 +86,10 @@ public class RecordWastage extends JFrame {
 		}
 		catch(Exception e) {
 			System.out.println(e);
-		}				
+		}
+		
+		
+		
 	}
 	
 	
@@ -167,6 +171,7 @@ public class RecordWastage extends JFrame {
 		txtQuantity.setColumns(10);
 		
 		JComboBox cmbReason = new JComboBox();
+		cmbReason.setModel(new DefaultComboBoxModel(new String[] {"Damage", "Refund", "Quality", "Gift"}));
 		cmbReason.setBackground(new Color(105, 105, 105));
 		cmbReason.setBounds(150, 171, 102, 22);
 		contentPane.add(cmbReason);
@@ -175,20 +180,6 @@ public class RecordWastage extends JFrame {
 		txtInfo.setColumns(10);
 		txtInfo.setBounds(150, 212, 191, 58);
 		contentPane.add(txtInfo);
-		
-		txtEmpName = new JTextField();
-		txtEmpName.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				txtEmpName.setText("");
-			}
-		});
-		txtEmpName.setText("NAME");
-		txtEmpName.setColumns(10);
-		txtEmpName.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));
-		txtEmpName.setBackground(new Color(105, 105, 105));
-		txtEmpName.setBounds(151, 286, 101, 20);
-		contentPane.add(txtEmpName);
 		
 		JTextField txtSubmit = new JTextField("SUBMIT");
 		txtSubmit.addMouseListener(new MouseAdapter() {
@@ -209,7 +200,7 @@ public class RecordWastage extends JFrame {
 				int wastageQuantity = Integer.parseInt(txtQuantity.getText());
 				String reason = (String) cmbReason.getSelectedItem();
 				String addInfo = txtInfo.getText();
-				String authName = txtEmpName.getText();
+				//String authName = txtEmpName.getText();
 				int newQuantity = oldQuant - wastageQuantity;
 				String newQuantS = String.valueOf(newQuantity);
 				

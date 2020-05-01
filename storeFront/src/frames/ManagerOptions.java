@@ -101,6 +101,14 @@ public class ManagerOptions extends JFrame {
 		txtClose.setColumns(10);
 		
 		txtEnterWastage = new JTextField();
+		txtEnterWastage.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				
+				
+			}
+		});
 		/*txtEnterWastage.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -125,9 +133,9 @@ public class ManagerOptions extends JFrame {
 		txtUpdateStock.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				dispose();
-				Stock Stock = new Stock();
-				Stock.setVisible(true);
+				//dispose();
+				//Stock Stock = new Stock();
+				//Stock.setVisible(true);
 			}
 		});
 		txtUpdateStock.setText("VIEW STOCK LIST");
