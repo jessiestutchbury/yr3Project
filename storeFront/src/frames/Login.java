@@ -21,9 +21,17 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Component;
+import java.awt.event.MouseMotionAdapter;
+import java.sql.SQLException;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class Login extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtUsername;
 	private JPasswordField pwdPassword;
@@ -32,6 +40,7 @@ public class Login extends JFrame {
 	private JLabel userIcon;
 	private JLabel lblAlert;
 	private JLabel passIcon;
+	private int xx, xy;
 
 	/**
 	 * Launch the application.
@@ -63,7 +72,7 @@ public class Login extends JFrame {
         int x = (dim.width-w)/2;
         int y = (dim.height-h)/2;
 
-        // Move the window
+        // Center the window
         this.setLocation(x, y);
 		
 		contentPane.setBackground(new Color(105, 105, 105));
@@ -71,42 +80,19 @@ public class Login extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		txtUsername = new JTextField();
-		txtUsername.setRequestFocusEnabled(false);
-		txtUsername.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				txtUsername.setText("");
-			}
-		});
-		txtUsername.setText("USERNAME");
-		txtUsername.setCaretColor(new Color(0, 0, 0));
-		txtUsername.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));
-		txtUsername.setBackground(new Color(105, 105, 105));
-		txtUsername.setBounds(184, 112, 270, 30);
-		contentPane.add(txtUsername);
-		txtUsername.setColumns(10);
-		
-		pwdPassword = new JPasswordField();
-		pwdPassword.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				pwdPassword.setText("");
-			}
-		});
-		pwdPassword.setText("PASWORD");
-		pwdPassword.setBackground(new Color(105, 105, 105));
-		pwdPassword.setCaretColor(new Color(0, 0, 0));
-		pwdPassword.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));
-		pwdPassword.setBounds(184, 173, 270, 30);
-		contentPane.add(pwdPassword);
 		
 		txtLogin = new JTextField();		
 		txtLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dispose();
-				JFrame dashboard = new Dashboard();
+				JFrame dashboard = null;
+				try {
+					dashboard = new Dashboard();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				dashboard.setVisible(true);
 			}
 		});
@@ -122,12 +108,50 @@ public class Login extends JFrame {
 		contentPane.add(txtLogin);
 		txtLogin.setColumns(10);
 		
+		txtUsername = new JTextField();
+		txtUsername.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtUsername.setText("");
+			}
+		});
+
+		txtUsername.setText("USERNAME");
+		txtUsername.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));
+		txtUsername.setBackground(new Color(105, 105, 105));
+		txtUsername.setBounds(184, 112, 270, 30);
+		contentPane.add(txtUsername);
+		
+		pwdPassword = new JPasswordField();
+		pwdPassword.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				pwdPassword.setText("");
+			}
+		});
+		pwdPassword.setText("PASSWORD");
+		pwdPassword.setBackground(new Color(105, 105, 105));
+		pwdPassword.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));
+		pwdPassword.setBounds(184, 173, 270, 30);
+		contentPane.add(pwdPassword);
+		
+		
 		lblClose = new JLabel();
 		lblClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblClose.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dispose();
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblClose.setForeground(new Color(255, 0, 0));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblClose.setForeground(new Color(255, 255, 255));
 			}
 		});
 		lblClose.setForeground(new Color(255, 255, 255));
@@ -180,5 +204,26 @@ public class Login extends JFrame {
 		header_1.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
 		header_1.setBounds(0, 0, 153, 36);
 		contentPane.add(header_1);
+		
+		JLabel lblDragger = new JLabel("");
+		lblDragger.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				int x = e.getXOnScreen();
+		        int y = e.getYOnScreen();
+		        Login.this.setLocation(x - xx, y - xy); 
+				
+			}
+		});
+		lblDragger.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				xx = e.getX();
+			     xy = e.getY();
+				
+			}
+		});
+		lblDragger.setBounds(0, 0, 598, 36);
+		contentPane.add(lblDragger);
 	}
 }

@@ -18,6 +18,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.awt.Component;
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
@@ -26,27 +27,16 @@ import java.awt.Toolkit;
 
 public class ManagerOptions extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txtMgrOptions;
+	private JTextField txtClose;
 	private JTextField txtEnterWastage;
 	private JTextField txtUpdateStock;
 	private JTextField txtRegisterUser;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -83,36 +73,42 @@ public class ManagerOptions extends JFrame {
 		separator.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		contentPane.add(separator);
 		
-		txtMgrOptions = new JTextField();		
-		txtMgrOptions.addMouseListener(new MouseAdapter() {
+		txtClose = new JTextField();		
+		txtClose.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dispose();
-				JFrame dashboard = new Dashboard();
-				dashboard.setVisible(true);
+				JFrame Dashboard = null;
+				try {
+					Dashboard = new Dashboard();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Dashboard.setVisible(true);
 			}
 		});
-		txtMgrOptions.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		txtMgrOptions.setEditable(false);
-		txtMgrOptions.setBackground(new Color(105, 105, 105));
-		txtMgrOptions.setForeground(new Color(255, 255, 255));
-		txtMgrOptions.setHorizontalAlignment(SwingConstants.CENTER);
-		txtMgrOptions.setFont(new Font("Tahoma", Font.BOLD, 15));
-		txtMgrOptions.setText("CLOSE");
-		txtMgrOptions.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		txtMgrOptions.setBounds(447, 306, 172, 36);
-		contentPane.add(txtMgrOptions);
-		txtMgrOptions.setColumns(10);
+		txtClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		txtClose.setEditable(false);
+		txtClose.setBackground(new Color(105, 105, 105));
+		txtClose.setForeground(new Color(255, 255, 255));
+		txtClose.setHorizontalAlignment(SwingConstants.CENTER);
+		txtClose.setFont(new Font("Tahoma", Font.BOLD, 15));
+		txtClose.setText("CLOSE");
+		txtClose.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		txtClose.setBounds(447, 306, 172, 36);
+		contentPane.add(txtClose);
+		txtClose.setColumns(10);
 		
 		txtEnterWastage = new JTextField();
-		txtEnterWastage.addMouseListener(new MouseAdapter() {
+		/*txtEnterWastage.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dispose();
-				JFrame recordWastage = new RecordWastage();
-				recordWastage.setVisible(true);				
+				JFrame RecordWastage = new RecordWastage();
+				RecordWastage.setVisible(true);				
 			}
-		});
+		});*/
 		txtEnterWastage.setText("ENTER WASTAGE");
 		txtEnterWastage.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		txtEnterWastage.setHorizontalAlignment(SwingConstants.CENTER);
@@ -130,11 +126,19 @@ public class ManagerOptions extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dispose();
-				JFrame editStockInfo = new EditStockInfo();
-				editStockInfo.setVisible(true);
+				Stock Stock = new Stock();
+				Stock.setVisible(true);
 			}
 		});
-		txtUpdateStock.setText("UPDATE STOCK");
+		txtUpdateStock.setText("VIEW STOCK LIST");
+		txtUpdateStock.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+				Stock Stock = new Stock();
+				Stock.setVisible(true);
+			}
+		});
 		txtUpdateStock.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		txtUpdateStock.setHorizontalAlignment(SwingConstants.CENTER);
 		txtUpdateStock.setForeground(Color.WHITE);

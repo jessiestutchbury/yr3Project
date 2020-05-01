@@ -1,6 +1,5 @@
 package frames;
 
-import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -22,8 +21,12 @@ import java.awt.Toolkit;
 
 public class Register extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JLabel header_1;
+	private JLabel subHeader;
 	private JTextField txtForename;
 	private JTextField txtSurname;
 	private JTextField txtAddress;
@@ -33,22 +36,6 @@ public class Register extends JFrame {
 	private JTextField txtRegister;
 	private JTextField txtId;
 	private JTextField txtClose;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Register frame = new Register();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -63,13 +50,13 @@ public class Register extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setUndecorated(true);
+		
+        // Move the window
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		int w = this.getSize().width;
         int h = this.getSize().height;
         int x = (dim.width-w)/2;
         int y = (dim.height-h)/2;
-
-        // Move the window
         this.setLocation(x, y);
 		
 		JLabel header = new JLabel("SPYROU & SONS");
@@ -79,12 +66,12 @@ public class Register extends JFrame {
 		header.setBounds(0, 0, 156, 36);
 		contentPane.add(header);
 		
-		header_1 = new JLabel("REGISTER NEW EMPLOYEE");
-		header_1.setHorizontalAlignment(SwingConstants.CENTER);
-		header_1.setForeground(Color.WHITE);
-		header_1.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
-		header_1.setBounds(156, 33, 316, 45);
-		contentPane.add(header_1);
+		subHeader = new JLabel("REGISTER NEW EMPLOYEE");
+		subHeader.setHorizontalAlignment(SwingConstants.CENTER);
+		subHeader.setForeground(Color.WHITE);
+		subHeader.setFont(new Font("Yu Gothic UI Light", Font.BOLD, 20));
+		subHeader.setBounds(156, 33, 316, 45);
+		contentPane.add(subHeader);
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(new Color(0, 0, 0));
@@ -94,6 +81,12 @@ public class Register extends JFrame {
 		contentPane.add(separator);
 		
 		txtForename = new JTextField();
+		txtForename.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtForename.setText("");
+			}
+		});
 		txtForename.setText("FORENAME");
 		txtForename.setBackground(new Color(105, 105, 105));
 		txtForename.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
@@ -102,6 +95,12 @@ public class Register extends JFrame {
 		txtForename.setColumns(10);
 
 		txtSurname = new JTextField();
+		txtSurname.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtSurname.setText("");
+			}
+		});
 		txtSurname.setText("SURNAME");
 		txtSurname.setBackground(new Color(105, 105, 105));
 		txtSurname.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
@@ -110,6 +109,12 @@ public class Register extends JFrame {
 		contentPane.add(txtSurname);
 		
 		txtAddress = new JTextField();
+		txtAddress.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtAddress.setText("");
+			}
+		});
 		txtAddress.setText("ADDRESS");
 		txtAddress.setBackground(new Color(105, 105, 105));
 		txtAddress.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
@@ -118,6 +123,12 @@ public class Register extends JFrame {
 		contentPane.add(txtAddress);
 		
 		txtEmail = new JTextField();
+		txtEmail.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtEmail.setText("");
+			}
+		});
 		txtEmail.setText("EMAIL");
 		txtEmail.setBackground(new Color(105, 105, 105));
 		txtEmail.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
@@ -126,6 +137,12 @@ public class Register extends JFrame {
 		contentPane.add(txtEmail);
 		
 		txtTelephone = new JTextField();
+		txtTelephone.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtTelephone.setText("");
+			}
+		});
 		txtTelephone.setText("TELEPHONE");
 		txtTelephone.setBackground(new Color(105, 105, 105));
 		txtTelephone.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
@@ -134,6 +151,12 @@ public class Register extends JFrame {
 		contentPane.add(txtTelephone);
 		
 		txtLevel = new JTextField();
+		txtLevel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtLevel.setText("");
+			}
+		});
 		txtLevel.setText("CLEARANCE LEVEL");
 		txtLevel.setBackground(new Color(105, 105, 105));
 		txtLevel.setBorder(BorderFactory.createMatteBorder(0,  0,  2,  0,  Color.BLACK));;
