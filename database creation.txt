@@ -1,0 +1,106 @@
+﻿create table "PRODUCT"
+(
+"PRODUCT_ID"         INT                primary key,
+"PRODUCT_NAME"        varchar(20) NOT NULL,
+"PRODUCT_DESCRIPTION"         varchar(50) NOT NULL,
+"PRICE"         INT,
+"QUANTITY"        INT
+);
+
+
+create table "ADDRESS"
+(
+"ADDRESS_ID"        INT        primary key,
+"POSTCODE"        varchar(10)        NOT NULL,
+"TOWN"        varchar(20)        NOT NULL,
+"STREET"        varchar(20)        NOT NULL
+);
+
+CREATE TABLE "CURRENT_ORDER" (
+"ORDER_ID"	INT	primary key IDENTITY(1,1),
+"PRODUCT_ID"	INT	NOT NULL,
+"PRODUCT_NAME"	varchar(20)	NOT NULL,
+"PRODUCT_PRICE"	INT	NOT NULL
+);
+
+create table "EMPLOYEE_LEVEL"
+(
+"LEVEL_ID"        INT        primary key,
+"LEVEL_NAME"        varchar(10)        NOT NULL
+);
+
+
+create table "EMPLOYEES"
+(
+"EMPLOYEE_ID"        INT        primary key,
+"FIRST_NAME"        varchar(10)        NOT NULL,
+"LAST_NAME"        varchar(20)        NOT NULL,
+"EMP_ADDRESS_ID"        INT,
+"EMAIL"        varchar(50),
+"PHONE_NUMBER"        INT,
+"EMPLOYEE_LEVEL_ID"        INT,
+FOREIGN KEY (EMP_ADDRESS_ID) REFERENCES ADDRESS(ADDRESS_ID)
+);
+
+
+
+
+create table "LOGIN_ACCOUNT"
+(
+"LOGIN_ID"        INT        primary key,
+"USERNAME"        varchar(20)        NOT NULL,
+"PASSWORD"        varchar(20)        NOT NULL,
+"EMPLOYEE_ID"        INT        NOT NULL,
+"EMPLOYEE_LEVEL_ID"        INT        NOT NULL,
+);
+
+
+create table "STOCK"
+(
+"PRODUCT_ID"        INT        primary key IDENTITY(1,1),
+"PRODUCT_NAME"        varchar(20)        NOT NULL,
+"PURCHASE_PRICE"        INT        NOT NULL,
+"SALE_PRICE"        INT        NOT NULL,
+"MINIMUM_QUANTITY"        INT,
+"MAXIMUM_QUANTITY"        INT,
+"RECOMMENDED_QUANTITY"        INT,
+"CURRENT_QUANTITY"        INT
+);
+
+
+create table "SALES"
+(
+"SALEID"                INT        primary key IDENTITY(1,1),
+"DATE"                DATE        NOT NULL,
+"TIME"                        INT        NOT NULL,
+"AMOUNT"                INT        NOT NULL,
+);
+
+
+create table "ORDER"
+(
+"ORDERID"                INT primary key IDENTITY(1,1),
+"DATE"                DATE NOT NULL,
+"ORDERNAME"        varchar(20) NOT NULL
+);
+
+
+
+
+create table "DELIVERY"
+(
+"DELIVERY_ID"         INT primary key IDENTITY(1,1),
+"PRODUCT_ID"        INT        NULL,
+"QUANTITY_ORDERED"        INT        NOT NULL,
+"ORDERID"                INT NOT NULL
+);
+
+
+CREATE TABLE "WASTAGE"
+(
+"WASTAGE_ID"        INT        primary key IDENTITY(1,1),
+"WASTED_QUANTITY"        INT NOT NULL,
+"PRODUCT_ID"        INT        NOT NULL,
+"REASON"        varchar(50)        NOT NULL,
+"ADDITIONAL_INFORMATION"        varchar(50)        NOT NULL
+)
